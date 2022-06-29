@@ -62,7 +62,7 @@ function App() {
 
       <form>
         <FormControl>
-          <InputLabel>Write a Todo</InputLabel>
+          <InputLabel>✔ Write a Todo</InputLabel>
           <Input
             value={input}
             onChange={(event) => setInput(event.target.value)}

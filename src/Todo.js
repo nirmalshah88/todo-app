@@ -1,29 +1,46 @@
 import React, { useState } from "react";
 import "./Todo.css";
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, deleteDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import {
-  Button,
   List,
   ListItem,
   ListItemAvatar,
   ListItemText,
-  Modal,
+  Dialog,
+  Button,
 } from "@mui/material";
 import db from "./firebase";
 
 function Todo(props) {
   const [open, setOpen] = useState(false);
+  const [input, setInput] = useState("");
+
+  const updateTodo = () => {
+    // update the todo with the new input text
+    const docRef = doc(db, "todos", props.todo.id);
+    updateDoc(docRef, {
+      todo: input,
+      timestamp: serverTimestamp(),
+    });
+    setOpen(false);
+    setInput("");
+  };
 
   return (
     <>
-      <Modal open={open} onClose={(e) => setOpen(false)}>
-        <div>
+      <Dialog open={open} onClose={(e) => setOpen(false)}>
+        <div className="todo__dialog">
           <h1>I am a modal</h1>
-          <button onClick={(e) => setOpen(false)}></button>
+          <input
+            placeholder={props.todo.todo}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
+          <Button onClick={updateTodo}>Update Todo</Button>
         </div>
-      </Modal>
-      <List>
+      </Dialog>
+      <List className="todo__list">
         <ListItemAvatar></ListItemAvatar>
         <ListItem>
           <ListItemText primary={props.todo.todo} secondary="deadline" />

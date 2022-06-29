@@ -1,3 +1,9 @@
 .todo__list {
   text-align: center;
 }
+
+.todo__dialog {
+  width: 600;
+  height: 600;
+  background-color: white;
+}
