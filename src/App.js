@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Button, FormControl, Input, InputLabel } from "@mui/material";
-import { addDoc, collection, onSnapshot } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  orderBy,
+  serverTimestamp,
+  query,
+} from "firebase/firestore";
 import "./App.css";
 import Todo from "./Todo";
 import db from "./firebase";
@@ -14,10 +21,15 @@ function App() {
   // provide a function using arrow function and give dependancies, if empty array then runs only once
   useEffect(() => {
     // this code fires when the App.js loads
-    onSnapshot(collection(db, "todos"), (snapshot) => {
-      // console.log(snapshot.docs.map((doc) => doc.data()));
-      setTodos(snapshot.docs.map((doc) => doc.data().todo));
-    });
+    onSnapshot(
+      query(collection(db, "todos"), orderBy("timestamp", "desc")),
+      (snapshot) => {
+        // console.log(snapshot.docs.map((doc) => doc.data()));
+        setTodos(
+          snapshot.docs.map((doc) => ({ id: doc.id, todo: doc.data().todo }))
+        );
+      }
+    );
   }, []);
 
   const addTodo = (event) => {
@@ -27,22 +39,27 @@ function App() {
     event.preventDefault(); // this will stop page refresh
 
     try {
-      const docRef = addDoc(collection(db, "todos"), {
-        todo: input,
-        // timestamp:
-      });
+      const docRef = addDoc(
+        collection(db, "todos"),
+        // orderBy("timestamp", "desc"),
+        {
+          todo: input,
+          timestamp: serverTimestamp(),
+        }
+      );
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document :", e);
     }
-
     // setTodos([...todos, input]); // append todo to existing array
+
     setInput(""); // clear input after adding todo
   };
 
   return (
     <div className="App">
       <h1>Get Shit Done</h1>
+
       <form>
         <FormControl>
           <InputLabel>Write a Todo</InputLabel>
@@ -57,7 +74,7 @@ function App() {
       </form>
       <ul>
         {todos.map((todo) => (
-          <Todo text={todo} />
+          <Todo todo={todo} />
         ))}
       </ul>
     </div>
