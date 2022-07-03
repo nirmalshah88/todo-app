@@ -65,7 +65,7 @@ function App() {
           <InputLabel>✔ Write a Todo</InputLabel>
           <Input
             value={input}
-            onChange={(event) => setInput(event.target.value)}
+            onChange={(e) => setInput(e.target.value)}
           ></Input>
         </FormControl>
         <Button disabled={!input} onClick={addTodo} type="submit">

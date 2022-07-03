@@ -1,5 +1,7 @@
 .todo__list {
   text-align: center;
+  display: inline-flex;
+  width: 80%;
 }
 
 .todo__dialog {

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Todo.css";
 import { doc, deleteDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   List,
   ListItem,
@@ -50,9 +51,9 @@ function Todo(props) {
             secondary={props.todo.timestamp}
           />
         </ListItem>
-        <button onClick={(e) => setOpen(true)}>Edit</button>
+        <EditIcon onClick={(e) => setOpen(true)} />
         <DeleteForeverIcon
-          onClick={(event) => deleteDoc(doc(db, "todos", props.todo.id))}
+          onClick={(e) => deleteDoc(doc(db, "todos", props.todo.id))}
         />
       </List>
     </>
