@@ -31,19 +31,24 @@ function Todo(props) {
     <>
       <Dialog open={open} onClose={(e) => setOpen(false)}>
         <div className="todo__dialog">
-          <h1>I am a modal</h1>
+          <h1>Edit Todo</h1>
           <input
             placeholder={props.todo.todo}
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
-          <Button onClick={updateTodo}>Update Todo</Button>
+          <Button disabled={!input} onClick={updateTodo}>
+            Update Todo
+          </Button>
         </div>
       </Dialog>
       <List className="todo__list">
         <ListItemAvatar></ListItemAvatar>
         <ListItem>
-          <ListItemText primary={props.todo.todo} secondary="deadline" />
+          <ListItemText
+            primary={props.todo.todo}
+            secondary={props.todo.timestamp}
+          />
         </ListItem>
         <button onClick={(e) => setOpen(true)}>Edit</button>
         <DeleteForeverIcon
